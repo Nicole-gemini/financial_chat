@@ -158,3 +158,6 @@ if __name__ == "__main__":
     evaluator = BankingEvaluator(config)
     evaluator.setting()
     evaluator.evaluate()
+    # 在评估结束后执行合并与保存
+    evaluator.model = evaluator.model.merge_and_unload()
+    evaluator.model.save_pretrained("/home/featurize/data/banking77_merged")

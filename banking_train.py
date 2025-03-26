@@ -161,7 +161,7 @@ class BankingTrainer:
         mytrainer.train()
         
         # 保存最佳模型
-        mytrainer.save_model("/home/featurize/data/financial_lora_model")
+        mytrainer.save_model("/home/featurize/data/banking77_lora")
         print("训练完成！")
 
 if __name__ == "__main__":
