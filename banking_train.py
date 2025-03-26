@@ -13,7 +13,6 @@ import torch
 import numpy as np
 
 # 配置信息
-  # 根据模型结构调整
 
 class BankingTrainer:
     def __init__(self, config):
@@ -25,7 +24,6 @@ class BankingTrainer:
         self.val_dataset = None
         
     def setting(self):
-        """初始化模型、数据"""
         # 加载数据集
         self._load_dataset()
         
@@ -41,7 +39,6 @@ class BankingTrainer:
         self._load_model()
         
     def _load_dataset(self):
-        """加载预处理后的数据集"""
         dataset = load_from_disk(self.config["data_path"])
         train_val = dataset["train"].train_test_split(
                                         train_size=0.8, # 80% 作为新训练集
@@ -56,7 +53,8 @@ class BankingTrainer:
               f"验证集集共有: {len(self.val_dataset)} 个样本")
 
     def _load_model(self):
-        """加载并配置4bit量化模型"""
+        # 加载并配置4bit量化模型
+        
         # 4bit量化配置
         bnb_config = BitsAndBytesConfig(
             load_in_4bit=True,
@@ -79,7 +77,7 @@ class BankingTrainer:
         self._lora_adapter()
         
     def _lora_adapter(self):
-        """添加LoRA微调模块"""
+        # 添加LoRA微调模块
         lora_config = LoraConfig(
             r=8,
             lora_alpha=16,
@@ -92,7 +90,7 @@ class BankingTrainer:
         self.model.print_trainable_parameters()
 
     def tokenize_batch(self, sample):
-        """批量分词处理"""
+        # 批量分词处理
         return self.tokenizer(
             sample["text"],
             padding="max_length",
@@ -102,7 +100,7 @@ class BankingTrainer:
         )
 
     def train(self):
-        """执行训练流程"""
+        # 训练
         # 数据集预处理
         train_data = self.train_dataset.map(
             self.tokenize_batch,
@@ -117,17 +115,17 @@ class BankingTrainer:
             batched=True,
             batch_size=512,
             num_proc=4,
-            remove_columns=["text"]  # 移除原始文本字段
+            remove_columns=["text"]
         )
-        # 转换为PyTorch格式
+        # 数据转换为PyTorch格式
         train_data.set_format("torch") 
         val_data.set_format("torch")
-        # 训练参数配置
+        # 训练参数
         train_params = TrainingArguments(
             output_dir="/home/featurize/data/banking77_lora",
             per_device_train_batch_size=8,  # 4bit量化允许更大batch
             per_device_eval_batch_size=16,
-            learning_rate=2e-4,
+            learning_rate=1e-4,
             num_train_epochs=5,  # 根据清洗后数据质量增加轮次
             weight_decay=0.01,
             evaluation_strategy="epoch",
