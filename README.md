@@ -13,18 +13,15 @@ pip install flash-attn==2.3.0 --no-build-isolation
 
 ###### #安装 vllm
 pip install vllm==0.7.3
-pip install fastapi uvicorn
 
-###### #安装 Llama-Factory
-git clone https://github.com/hiyouga/LLaMA-Factory
-cd llama-factory
-pip install .
+pip install fastapi uvicorn
 
 ###### #安装modelscope库，国内下载
 pip install modelscope
 
 ###### #下载模型
 mkdir /home/featurize/work/model # 创建并进入目录
+
 cd /home/featurize/work/model
 
 ###### #安装 Git LFS（在 Ubuntu 上）
@@ -32,6 +29,7 @@ sudo apt-get install git-lfs
 
 ###### #初始化 Git LFS
 git lfs install
+
 git clone https://www.modelscope.cn/deepseek-ai/deepseek-llm-7b-chat
 
 ###### #降级 peft 版本（llamafactory 需要 peft 版本在 0.11.1 到 0.12.0 之间）
@@ -49,9 +47,11 @@ pip install --no-cache-dir "tokenizers<=0.21.0,>=0.19.0"
 ###### #后台挂起终端
 ###### #训练与查看状态
 tmux new-session -d -s mysession "python banking_train.py"
+
 tmux attach-session -t mysession
 ### 评估与查看状态
 tmux new-session -d -s session2 "python banking_eval.py"
+
 tmux attach-session -t session2
 ### 部署与查看状态
 tmux new-session -d -s session4 "python banking_deploy.py"
