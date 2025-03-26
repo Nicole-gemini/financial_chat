@@ -54,9 +54,6 @@ tmux attach-session -t mysession
 tmux new-session -d -s session2 "python banking_eval.py"
 tmux attach-session -t session2
 ### 部署与查看状态
-tmux new-session -d -s session3 "llamafactory-cli api examples/inference/bank_lora_merged.yaml"
-tmux attach-session -t session3
-
 tmux new-session -d -s session4 "python banking_deploy.py"
 
 ### 场景测试
